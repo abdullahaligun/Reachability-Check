@@ -4,8 +4,12 @@
     "name": "Kurumsal — Katı Politika",
     "description": "Strict corporate network policy. All listed services must be reachable and performant. Intended for IT/network compliance audits.",
     "version": "1.0.0",
-    "author": "netscope-community",
-    "tags": ["corporate", "compliance", "it-audit"],
+    "author": "abdullahaligun",
+    "tags": [
+      "corporate",
+      "compliance",
+      "it-audit"
+    ],
     "on_failure": "alert"
   },
   "rules": [
@@ -13,7 +17,12 @@
       "id": "rule-github-access",
       "name": "GitHub Erişimi",
       "description": "Developer workflow requires GitHub to be reachable",
-      "service": { "name": "GitHub", "host": "github.com", "url": "https://github.com", "favicon": "https://github.com/favicon.ico" },
+      "service": {
+        "name": "GitHub",
+        "host": "github.com",
+        "url": "https://github.com",
+        "favicon": "https://github.com/favicon.ico"
+      },
       "severity": "critical",
       "conditions": {
         "must_reach": true,
@@ -26,7 +35,12 @@
       "id": "rule-slack-access",
       "name": "Slack Erişimi",
       "description": "Internal communication requires Slack",
-      "service": { "name": "Slack", "host": "slack.com", "url": "https://slack.com", "favicon": "https://slack.com/favicon.ico" },
+      "service": {
+        "name": "Slack",
+        "host": "slack.com",
+        "url": "https://slack.com",
+        "favicon": "https://slack.com/favicon.ico"
+      },
       "severity": "critical",
       "conditions": {
         "must_reach": true,
@@ -39,7 +53,12 @@
       "id": "rule-zoom-latency",
       "name": "Zoom Gecikme Sınırı",
       "description": "Video calls require low latency",
-      "service": { "name": "Zoom", "host": "zoom.us", "url": "https://zoom.us", "favicon": "https://zoom.us/favicon.ico" },
+      "service": {
+        "name": "Zoom",
+        "host": "zoom.us",
+        "url": "https://zoom.us",
+        "favicon": "https://zoom.us/favicon.ico"
+      },
       "severity": "warning",
       "conditions": {
         "must_reach": true,
@@ -52,7 +71,12 @@
       "id": "rule-social-blocked",
       "name": "Sosyal Medya Engeli",
       "description": "Corporate policy: social media should NOT be accessible",
-      "service": { "name": "Instagram", "host": "instagram.com", "url": "https://www.instagram.com", "favicon": "https://www.instagram.com/favicon.ico" },
+      "service": {
+        "name": "Instagram",
+        "host": "instagram.com",
+        "url": "https://www.instagram.com",
+        "favicon": "https://www.instagram.com/favicon.ico"
+      },
       "severity": "warning",
       "conditions": {
         "must_reach": false
@@ -64,7 +88,12 @@
       "id": "rule-tiktok-blocked",
       "name": "TikTok Engeli",
       "description": "Corporate policy: TikTok must be blocked",
-      "service": { "name": "TikTok", "host": "tiktok.com", "url": "https://www.tiktok.com", "favicon": "https://www.tiktok.com/favicon.ico" },
+      "service": {
+        "name": "TikTok",
+        "host": "tiktok.com",
+        "url": "https://www.tiktok.com",
+        "favicon": "https://www.tiktok.com/favicon.ico"
+      },
       "severity": "critical",
       "conditions": {
         "must_reach": false
@@ -76,7 +105,12 @@
       "id": "rule-cloudflare-dns",
       "name": "Cloudflare Erişimi",
       "description": "CDN and DNS infrastructure must be reachable",
-      "service": { "name": "Cloudflare", "host": "cloudflare.com", "url": "https://www.cloudflare.com", "favicon": "https://www.cloudflare.com/favicon.ico" },
+      "service": {
+        "name": "Cloudflare",
+        "host": "cloudflare.com",
+        "url": "https://www.cloudflare.com",
+        "favicon": "https://www.cloudflare.com/favicon.ico"
+      },
       "severity": "info",
       "conditions": {
         "must_reach": true,

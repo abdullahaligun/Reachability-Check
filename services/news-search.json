@@ -5,18 +5,68 @@
     "description": "Search engines, encyclopedias and major news outlets",
     "icon": "◎",
     "version": "1.0.0",
-    "author": "netscope-community",
-    "tags": ["news", "search", "media", "information"]
+    "author": "abdullahaligun",
+    "tags": [
+      "news",
+      "search",
+      "media",
+      "information"
+    ]
   },
   "services": [
-    { "name": "Google",       "host": "google.com",       "url": "https://www.google.com",       "favicon": "https://www.google.com/favicon.ico" },
-    { "name": "DuckDuckGo",   "host": "duckduckgo.com",   "url": "https://duckduckgo.com",       "favicon": "https://duckduckgo.com/favicon.ico" },
-    { "name": "Bing",         "host": "bing.com",         "url": "https://www.bing.com",         "favicon": "https://www.bing.com/favicon.ico" },
-    { "name": "Wikipedia",    "host": "wikipedia.org",    "url": "https://en.wikipedia.org",     "favicon": "https://en.wikipedia.org/favicon.ico" },
-    { "name": "BBC News",     "host": "bbc.com",          "url": "https://www.bbc.com",          "favicon": "https://www.bbc.com/favicon.ico" },
-    { "name": "Reuters",      "host": "reuters.com",      "url": "https://www.reuters.com",      "favicon": "https://www.reuters.com/favicon.ico" },
-    { "name": "The Guardian", "host": "theguardian.com",  "url": "https://www.theguardian.com",  "favicon": "https://www.theguardian.com/favicon.ico" },
-    { "name": "Al Jazeera",   "host": "aljazeera.com",    "url": "https://www.aljazeera.com",    "favicon": "https://www.aljazeera.com/favicon.ico" },
-    { "name": "AP News",      "host": "apnews.com",       "url": "https://apnews.com",           "favicon": "https://apnews.com/favicon.ico" }
+    {
+      "name": "Google",
+      "host": "google.com",
+      "url": "https://www.google.com",
+      "favicon": "https://www.google.com/favicon.ico"
+    },
+    {
+      "name": "DuckDuckGo",
+      "host": "duckduckgo.com",
+      "url": "https://duckduckgo.com",
+      "favicon": "https://duckduckgo.com/favicon.ico"
+    },
+    {
+      "name": "Bing",
+      "host": "bing.com",
+      "url": "https://www.bing.com",
+      "favicon": "https://www.bing.com/favicon.ico"
+    },
+    {
+      "name": "Wikipedia",
+      "host": "wikipedia.org",
+      "url": "https://en.wikipedia.org",
+      "favicon": "https://en.wikipedia.org/favicon.ico"
+    },
+    {
+      "name": "BBC News",
+      "host": "bbc.com",
+      "url": "https://www.bbc.com",
+      "favicon": "https://www.bbc.com/favicon.ico"
+    },
+    {
+      "name": "Reuters",
+      "host": "reuters.com",
+      "url": "https://www.reuters.com",
+      "favicon": "https://www.reuters.com/favicon.ico"
+    },
+    {
+      "name": "The Guardian",
+      "host": "theguardian.com",
+      "url": "https://www.theguardian.com",
+      "favicon": "https://www.theguardian.com/favicon.ico"
+    },
+    {
+      "name": "Al Jazeera",
+      "host": "aljazeera.com",
+      "url": "https://www.aljazeera.com",
+      "favicon": "https://www.aljazeera.com/favicon.ico"
+    },
+    {
+      "name": "AP News",
+      "host": "apnews.com",
+      "url": "https://apnews.com",
+      "favicon": "https://apnews.com/favicon.ico"
+    }
   ]
 }

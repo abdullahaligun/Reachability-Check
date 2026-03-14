@@ -5,20 +5,80 @@
     "description": "AI assistants, image generators and ML platforms",
     "icon": "◆",
     "version": "1.0.0",
-    "author": "netscope-community",
-    "tags": ["ai", "llm", "ml", "tools"]
+    "author": "abdullahaligun",
+    "tags": [
+      "ai",
+      "llm",
+      "ml",
+      "tools"
+    ]
   },
   "services": [
-    { "name": "Claude",        "host": "claude.ai",          "url": "https://claude.ai",               "favicon": "https://claude.ai/favicon.ico" },
-    { "name": "ChatGPT",       "host": "chat.openai.com",    "url": "https://chat.openai.com",         "favicon": "https://chat.openai.com/favicon.ico" },
-    { "name": "Gemini",        "host": "gemini.google.com",  "url": "https://gemini.google.com",       "favicon": "https://www.google.com/favicon.ico" },
-    { "name": "Perplexity",    "host": "perplexity.ai",      "url": "https://www.perplexity.ai",       "favicon": "https://www.perplexity.ai/favicon.ico" },
-    { "name": "Midjourney",    "host": "midjourney.com",     "url": "https://www.midjourney.com",      "favicon": "https://www.midjourney.com/favicon.ico" },
-    { "name": "Hugging Face",  "host": "huggingface.co",     "url": "https://huggingface.co",          "favicon": "https://huggingface.co/favicon.ico" },
-    { "name": "Grok / xAI",   "host": "x.ai",               "url": "https://x.ai",                    "favicon": "https://x.ai/favicon.ico" },
-    { "name": "Mistral",       "host": "mistral.ai",         "url": "https://mistral.ai",              "favicon": "https://mistral.ai/favicon.ico" },
-    { "name": "Cohere",        "host": "cohere.com",         "url": "https://cohere.com",              "favicon": "https://cohere.com/favicon.ico" },
-    { "name": "Stability AI",  "host": "stability.ai",       "url": "https://stability.ai",            "favicon": "https://stability.ai/favicon.ico" },
-    { "name": "Replicate",     "host": "replicate.com",      "url": "https://replicate.com",           "favicon": "https://replicate.com/favicon.ico" }
+    {
+      "name": "Claude",
+      "host": "claude.ai",
+      "url": "https://claude.ai",
+      "favicon": "https://claude.ai/favicon.ico"
+    },
+    {
+      "name": "ChatGPT",
+      "host": "chat.openai.com",
+      "url": "https://chat.openai.com",
+      "favicon": "https://chat.openai.com/favicon.ico"
+    },
+    {
+      "name": "Gemini",
+      "host": "gemini.google.com",
+      "url": "https://gemini.google.com",
+      "favicon": "https://www.google.com/favicon.ico"
+    },
+    {
+      "name": "Perplexity",
+      "host": "perplexity.ai",
+      "url": "https://www.perplexity.ai",
+      "favicon": "https://www.perplexity.ai/favicon.ico"
+    },
+    {
+      "name": "Midjourney",
+      "host": "midjourney.com",
+      "url": "https://www.midjourney.com",
+      "favicon": "https://www.midjourney.com/favicon.ico"
+    },
+    {
+      "name": "Hugging Face",
+      "host": "huggingface.co",
+      "url": "https://huggingface.co",
+      "favicon": "https://huggingface.co/favicon.ico"
+    },
+    {
+      "name": "Grok / xAI",
+      "host": "x.ai",
+      "url": "https://x.ai",
+      "favicon": "https://x.ai/favicon.ico"
+    },
+    {
+      "name": "Mistral",
+      "host": "mistral.ai",
+      "url": "https://mistral.ai",
+      "favicon": "https://mistral.ai/favicon.ico"
+    },
+    {
+      "name": "Cohere",
+      "host": "cohere.com",
+      "url": "https://cohere.com",
+      "favicon": "https://cohere.com/favicon.ico"
+    },
+    {
+      "name": "Stability AI",
+      "host": "stability.ai",
+      "url": "https://stability.ai",
+      "favicon": "https://stability.ai/favicon.ico"
+    },
+    {
+      "name": "Replicate",
+      "host": "replicate.com",
+      "url": "https://replicate.com",
+      "favicon": "https://replicate.com/favicon.ico"
+    }
   ]
 }

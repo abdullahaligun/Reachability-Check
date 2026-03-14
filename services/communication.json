@@ -5,19 +5,74 @@
     "description": "Messaging, video conferencing and team collaboration tools",
     "icon": "◉",
     "version": "1.0.0",
-    "author": "netscope-community",
-    "tags": ["communication", "messaging", "video", "collaboration"]
+    "author": "abdullahaligun",
+    "tags": [
+      "communication",
+      "messaging",
+      "video",
+      "collaboration"
+    ]
   },
   "services": [
-    { "name": "WhatsApp",  "host": "whatsapp.com",        "url": "https://web.whatsapp.com",        "favicon": "https://web.whatsapp.com/favicon.ico" },
-    { "name": "Telegram",  "host": "telegram.org",        "url": "https://web.telegram.org",        "favicon": "https://web.telegram.org/favicon.ico" },
-    { "name": "Discord",   "host": "discord.com",         "url": "https://discord.com",             "favicon": "https://discord.com/favicon.ico" },
-    { "name": "Slack",     "host": "slack.com",           "url": "https://slack.com",               "favicon": "https://slack.com/favicon.ico" },
-    { "name": "Zoom",      "host": "zoom.us",             "url": "https://zoom.us",                 "favicon": "https://zoom.us/favicon.ico" },
-    { "name": "Teams",     "host": "teams.microsoft.com", "url": "https://teams.microsoft.com",     "favicon": "https://teams.microsoft.com/favicon.ico" },
-    { "name": "Signal",    "host": "signal.org",          "url": "https://signal.org",              "favicon": "https://signal.org/favicon.ico" },
-    { "name": "Skype",     "host": "skype.com",           "url": "https://www.skype.com",           "favicon": "https://www.skype.com/favicon.ico" },
-    { "name": "Webex",     "host": "webex.com",           "url": "https://www.webex.com",           "favicon": "https://www.webex.com/favicon.ico" },
-    { "name": "Element",   "host": "element.io",          "url": "https://element.io",              "favicon": "https://element.io/favicon.ico" }
+    {
+      "name": "WhatsApp",
+      "host": "whatsapp.com",
+      "url": "https://web.whatsapp.com",
+      "favicon": "https://web.whatsapp.com/favicon.ico"
+    },
+    {
+      "name": "Telegram",
+      "host": "telegram.org",
+      "url": "https://web.telegram.org",
+      "favicon": "https://web.telegram.org/favicon.ico"
+    },
+    {
+      "name": "Discord",
+      "host": "discord.com",
+      "url": "https://discord.com",
+      "favicon": "https://discord.com/favicon.ico"
+    },
+    {
+      "name": "Slack",
+      "host": "slack.com",
+      "url": "https://slack.com",
+      "favicon": "https://slack.com/favicon.ico"
+    },
+    {
+      "name": "Zoom",
+      "host": "zoom.us",
+      "url": "https://zoom.us",
+      "favicon": "https://zoom.us/favicon.ico"
+    },
+    {
+      "name": "Teams",
+      "host": "teams.microsoft.com",
+      "url": "https://teams.microsoft.com",
+      "favicon": "https://teams.microsoft.com/favicon.ico"
+    },
+    {
+      "name": "Signal",
+      "host": "signal.org",
+      "url": "https://signal.org",
+      "favicon": "https://signal.org/favicon.ico"
+    },
+    {
+      "name": "Skype",
+      "host": "skype.com",
+      "url": "https://www.skype.com",
+      "favicon": "https://www.skype.com/favicon.ico"
+    },
+    {
+      "name": "Webex",
+      "host": "webex.com",
+      "url": "https://www.webex.com",
+      "favicon": "https://www.webex.com/favicon.ico"
+    },
+    {
+      "name": "Element",
+      "host": "element.io",
+      "url": "https://element.io",
+      "favicon": "https://element.io/favicon.ico"
+    }
   ]
 }
