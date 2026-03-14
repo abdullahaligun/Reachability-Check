@@ -4,1202 +4,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reachability Check — Bağlantı Denetleyici</title>
-  <meta name="description"
+  <title data-i18n="title">Reachability Check — Bağlantı Denetleyici</title>
+  <meta name="description" data-i18n="description"
     content="Yerel ağ politikaları, firewall veya devlet kısıtlamalarından kaynaklanan erişim engellerini anlık test edin." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@700;800&display=swap"
     rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #0c0c0e;
-      --bg2: #141418;
-      --bg3: #1c1c22;
-      --bg4: #242430;
-      --bg5: #2e2e3c;
-      --b1: rgba(255, 255, 255, .07);
-      --b2: rgba(255, 255, 255, .13);
-      --b3: rgba(255, 255, 255, .20);
-      --tx: #f0f0f5;
-      --tx2: #9898aa;
-      --tx3: #55556a;
-      --ac: #6e6eff;
-      --gn: #4ade80;
-      --gn-bg: rgba(74, 222, 128, .09);
-      --gn-bd: rgba(74, 222, 128, .22);
-      --am: #fbbf24;
-      --am-bg: rgba(251, 191, 36, .09);
-      --am-bd: rgba(251, 191, 36, .22);
-      --rd: #f87171;
-      --rd-bg: rgba(248, 113, 113, .09);
-      --rd-bd: rgba(248, 113, 113, .22);
-      --bl: #38bdf8;
-      --mono: 'JetBrains Mono', monospace;
-      --sans: 'Syne', sans-serif;
-      --r: 10px;
-      --rl: 16px;
-    }
-
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0
-    }
-
-    html {
-      scroll-behavior: smooth
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--tx);
-      font-family: var(--mono);
-      min-height: 100vh;
-      line-height: 1.6;
-      overflow-x: hidden
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: linear-gradient(rgba(110, 110, 255, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(110, 110, 255, .025) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0
-    }
-
-    .page {
-      position: relative;
-      z-index: 1;
-      max-width: 1060px;
-      margin: 0 auto;
-      padding: 0 20px 100px
-    }
-
-    .hdr {
-      padding: 44px 0 36px;
-      border-bottom: 1px solid var(--b1);
-      margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 14px
-    }
-
-    .logo-ico {
-      width: 40px;
-      height: 40px;
-      background: var(--ac);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0
-    }
-
-    .logo-ico svg {
-      width: 20px;
-      height: 20px
-    }
-
-    .logo-name {
-      font-family: var(--sans);
-      font-size: 21px;
-      font-weight: 800;
-      letter-spacing: -.02em
-    }
-
-    .logo-sub {
-      font-size: 10px;
-      color: var(--tx3);
-      letter-spacing: .1em;
-      text-transform: uppercase
-    }
-
-    .hdr-r {
-      font-size: 11px;
-      color: var(--tx3)
-    }
-
-    #lastRun {
-      color: var(--tx2)
-    }
-
-    .ip-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 24px
-    }
-
-    @media(max-width:500px) {
-      .ip-grid {
-        grid-template-columns: 1fr
-      }
-    }
-
-    .ip-card {
-      background: var(--bg2);
-      border: 1px solid var(--b1);
-      border-radius: var(--rl);
-      padding: 18px 22px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color .2s
-    }
-
-    .ip-card:hover {
-      border-color: var(--b2)
-    }
-
-    .ip-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at top left, rgba(110, 110, 255, .055), transparent 70%);
-      pointer-events: none
-    }
-
-    .ip-lbl {
-      font-size: 10px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--tx3);
-      margin-bottom: 8px
-    }
-
-    .ip-val {
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: .04em;
-      min-height: 30px;
-      font-feature-settings: "tnum"
-    }
-
-    .ip-val.loading {
-      color: var(--tx3);
-      animation: shimmer 1.5s ease infinite
-    }
-
-    .ip-sub {
-      font-size: 11px;
-      color: var(--tx3);
-      margin-top: 4px
-    }
-
-    @keyframes shimmer {
-
-      0%,
-      100% {
-        opacity: .35
-      }
-
-      50% {
-        opacity: .75
-      }
-    }
-
-    /* Panel */
-    .panel {
-      background: var(--bg2);
-      border: 1px solid var(--b1);
-      border-radius: var(--rl);
-      margin-bottom: 16px;
-      overflow: hidden
-    }
-
-    .ph {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 13px 20px;
-      cursor: pointer;
-      transition: background .15s;
-      user-select: none
-    }
-
-    .ph:hover {
-      background: var(--bg3)
-    }
-
-    .ph-icon {
-      font-size: 14px
-    }
-
-    .ph-title {
-      font-family: var(--sans);
-      font-size: 13px;
-      font-weight: 700
-    }
-
-    .ph-badge {
-      margin-left: auto;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: .06em;
-      padding: 3px 9px;
-      border-radius: 5px;
-      background: var(--bg4);
-      color: var(--tx3);
-      border: 1px solid var(--b1)
-    }
-
-    .ph-badge.ok {
-      background: var(--gn-bg);
-      color: var(--gn);
-      border-color: var(--gn-bd)
-    }
-
-    .ph-badge.warn {
-      background: var(--am-bg);
-      color: var(--am);
-      border-color: var(--am-bd)
-    }
-
-    .ph-badge.fail {
-      background: var(--rd-bg);
-      color: var(--rd);
-      border-color: var(--rd-bd)
-    }
-
-    .ph-chev {
-      font-size: 10px;
-      color: var(--tx3);
-      transition: transform .2s;
-      margin-left: 8px
-    }
-
-    .ph-chev.open {
-      transform: rotate(180deg)
-    }
-
-    .pb {
-      padding: 0 20px 20px;
-      display: none
-    }
-
-    .pb.open {
-      display: block
-    }
-
-    .p-desc {
-      font-size: 12px;
-      color: var(--tx3);
-      margin-bottom: 14px;
-      line-height: 1.7
-    }
-
-    /* Inputs & buttons */
-    .row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 12px
-    }
-
-    .inp {
-      flex: 1;
-      min-width: 180px;
-      background: var(--bg4);
-      border: 1px solid var(--b2);
-      border-radius: var(--r);
-      padding: 9px 14px;
-      font-family: var(--mono);
-      font-size: 13px;
-      color: var(--tx);
-      outline: none;
-      transition: border-color .15s
-    }
-
-    .inp::placeholder {
-      color: var(--tx3)
-    }
-
-    .inp:focus {
-      border-color: var(--ac)
-    }
-
-    .btn-q {
-      background: var(--bg4);
-      border: 1px solid var(--b2);
-      border-radius: var(--r);
-      padding: 9px 18px;
-      font-family: var(--mono);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--tx2);
-      cursor: pointer;
-      transition: all .15s;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 6px
-    }
-
-    .btn-q:hover {
-      border-color: var(--ac);
-      color: var(--ac)
-    }
-
-    .qs {
-      width: 11px;
-      height: 11px;
-      border: 1.5px solid rgba(110, 110, 255, .3);
-      border-top-color: var(--ac);
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      display: none
-    }
-
-    .btn-q.busy .qs {
-      display: block
-    }
-
-    .btn-q.busy .qi {
-      display: none
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg)
-      }
-    }
-
-    /* Pack grid */
-    .pack-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
-      gap: 8px;
-      margin-bottom: 14px
-    }
-
-    .pc {
-      background: var(--bg3);
-      border: 1px solid var(--b1);
-      border-radius: var(--r);
-      padding: 11px 14px;
-      cursor: pointer;
-      transition: all .15s;
-      user-select: none
-    }
-
-    .pc:hover {
-      border-color: var(--b2)
-    }
-
-    .pc.on {
-      border-color: var(--gn-bd);
-      background: var(--gn-bg)
-    }
-
-    .pc.busy {
-      opacity: .4;
-      pointer-events: none
-    }
-
-    .pc-top {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 5px
-    }
-
-    .pc-ico {
-      font-size: 14px
-    }
-
-    .pc-name {
-      font-size: 12px;
-      font-weight: 500
-    }
-
-    .pc-cnt {
-      margin-left: auto;
-      font-size: 10px;
-      color: var(--tx3)
-    }
-
-    .pc-tags {
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap
-    }
-
-    .pc-tag {
-      font-size: 9px;
-      letter-spacing: .06em;
-      padding: 2px 6px;
-      border-radius: 3px;
-      background: var(--bg4);
-      color: var(--tx3)
-    }
-
-    /* Drop zone */
-    .drop {
-      border: 1px dashed var(--b2);
-      border-radius: var(--r);
-      padding: 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: all .15s;
-      margin-top: 4px
-    }
-
-    .drop:hover,
-    .drop.over {
-      border-color: var(--ac);
-      background: rgba(110, 110, 255, .05)
-    }
-
-    .di {
-      font-size: 20px;
-      color: var(--tx3);
-      margin-bottom: 5px
-    }
-
-    .dt {
-      font-size: 12px;
-      color: var(--tx2)
-    }
-
-    .ds {
-      font-size: 11px;
-      color: var(--tx3);
-      margin-top: 3px
-    }
-
-    .dl {
-      color: var(--ac);
-      cursor: pointer;
-      text-decoration: underline
-    }
-
-    .pmsg {
-      font-size: 12px;
-      margin-top: 8px;
-      min-height: 18px
-    }
-
-    .pmsg.ok {
-      color: var(--gn)
-    }
-
-    .pmsg.err {
-      color: var(--rd)
-    }
-
-    /* Rule rows */
-    .rl-row {
-      display: grid;
-      grid-template-columns: 20px 1fr auto;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      border-radius: var(--r);
-      border: 1px solid var(--b1);
-      background: var(--bg3);
-      animation: fadeIn .2s ease
-    }
-
-    .rl-row.pending {
-      opacity: .55
-    }
-
-    .sv-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      flex-shrink: 0
-    }
-
-    .sv-critical {
-      background: var(--rd)
-    }
-
-    .sv-warning {
-      background: var(--am)
-    }
-
-    .sv-info {
-      background: var(--bl)
-    }
-
-    .rl-name {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--tx)
-    }
-
-    .rl-msg {
-      font-size: 11px;
-      color: var(--tx3);
-      margin-top: 2px
-    }
-
-    .rl-badge {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: .06em;
-      padding: 3px 9px;
-      border-radius: 5px;
-      white-space: nowrap;
-      background: var(--bg4);
-      color: var(--tx3);
-      border: 1px solid var(--b1)
-    }
-
-    .rl-badge.pass {
-      background: var(--gn-bg);
-      color: var(--gn);
-      border-color: var(--gn-bd)
-    }
-
-    .rl-badge.fail {
-      background: var(--rd-bg);
-      color: var(--rd);
-      border-color: var(--rd-bd)
-    }
-
-    .rl-badge.warn {
-      background: var(--am-bg);
-      color: var(--am);
-      border-color: var(--am-bd)
-    }
-
-    .rule-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      flex-wrap: wrap
-    }
-
-    /* Controls */
-    .ctrl {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap
-    }
-
-    .btn-run {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      background: var(--ac);
-      color: #fff;
-      border: none;
-      border-radius: var(--r);
-      padding: 10px 22px;
-      font-family: var(--mono);
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: .04em;
-      cursor: pointer;
-      transition: opacity .15s, transform .1s;
-      white-space: nowrap
-    }
-
-    .btn-run:hover {
-      opacity: .87
-    }
-
-    .btn-run:active {
-      transform: scale(.98)
-    }
-
-    .btn-run:disabled {
-      opacity: .35;
-      cursor: not-allowed;
-      transform: none
-    }
-
-    .sp {
-      width: 13px;
-      height: 13px;
-      border: 2px solid rgba(255, 255, 255, .3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      display: none
-    }
-
-    .btn-run.busy .sp {
-      display: block
-    }
-
-    .btn-run.busy .bi {
-      display: none
-    }
-
-    .pw {
-      flex: 1;
-      min-width: 140px
-    }
-
-    .po {
-      height: 3px;
-      background: var(--bg4);
-      border-radius: 2px;
-      overflow: hidden;
-      margin-bottom: 5px
-    }
-
-    .pi {
-      height: 100%;
-      background: var(--ac);
-      border-radius: 2px;
-      width: 0%;
-      transition: width .25s ease
-    }
-
-    .pt {
-      font-size: 11px;
-      color: var(--tx3)
-    }
-
-    /* Toolbar */
-    .toolbar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 24px;
-      flex-wrap: wrap
-    }
-
-    .tl {
-      font-size: 10px;
-      color: var(--tx3);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      margin-right: 2px
-    }
-
-    .chip {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: .04em;
-      padding: 5px 13px;
-      border-radius: 20px;
-      border: 1px solid var(--b2);
-      background: var(--bg3);
-      color: var(--tx2);
-      cursor: pointer;
-      transition: all .15s;
-      white-space: nowrap
-    }
-
-    .chip:hover {
-      border-color: var(--b3);
-      color: var(--tx)
-    }
-
-    .chip.a {
-      background: var(--ac);
-      border-color: var(--ac);
-      color: #fff
-    }
-
-    .chip.a-gn {
-      background: var(--gn-bg);
-      border-color: var(--gn-bd);
-      color: var(--gn)
-    }
-
-    .chip.a-am {
-      background: var(--am-bg);
-      border-color: var(--am-bd);
-      color: var(--am)
-    }
-
-    .chip.a-rd {
-      background: var(--rd-bg);
-      border-color: var(--rd-bd);
-      color: var(--rd)
-    }
-
-    .tsep {
-      width: 1px;
-      height: 20px;
-      background: var(--b2);
-      margin: 0 2px;
-      flex-shrink: 0
-    }
-
-    .ss {
-      background: var(--bg3);
-      border: 1px solid var(--b2);
-      border-radius: var(--r);
-      padding: 5px 10px;
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--tx2);
-      cursor: pointer;
-      outline: none
-    }
-
-    .ss:focus {
-      border-color: var(--ac)
-    }
-
-    /* Summary */
-    .sum {
-      display: flex;
-      gap: 9px;
-      margin-bottom: 28px;
-      flex-wrap: wrap
-    }
-
-    .sp2 {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg3);
-      border: 1px solid var(--b1);
-      border-radius: 6px;
-      padding: 5px 13px;
-      font-size: 11px;
-      color: var(--tx2)
-    }
-
-    .sd {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      flex-shrink: 0
-    }
-
-    .sc {
-      font-weight: 600;
-      color: var(--tx);
-      margin-right: 2px
-    }
-
-    /* Group */
-    .group {
-      margin-bottom: 30px
-    }
-
-    .gh {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--b1)
-    }
-
-    .gi {
-      width: 26px;
-      height: 26px;
-      background: var(--bg3);
-      border: 1px solid var(--b1);
-      border-radius: 7px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px
-    }
-
-    .gt {
-      font-family: var(--sans);
-      font-size: 13px;
-      font-weight: 700
-    }
-
-    .gs {
-      margin-left: auto;
-      font-size: 11px;
-      color: var(--tx3)
-    }
-
-    .gs.bad {
-      color: var(--rd)
-    }
-
-    .gs.all {
-      color: var(--gn)
-    }
-
-    .ge {
-      font-size: 12px;
-      color: var(--tx3);
-      padding: 12px 0;
-      text-align: center
-    }
-
-    /* Service rows */
-    .sl {
-      display: flex;
-      flex-direction: column;
-      gap: 4px
-    }
-
-    .chdr {
-      display: grid;
-      grid-template-columns: 1fr 150px 105px 105px 96px;
-      gap: 10px;
-      padding: 2px 14px 6px
-    }
-
-    .ch {
-      font-size: 10px;
-      color: var(--tx3);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      text-align: right
-    }
-
-    .ch:first-child {
-      text-align: left
-    }
-
-    .sr {
-      display: grid;
-      grid-template-columns: 1fr 150px 105px 105px 96px;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 14px;
-      background: var(--bg2);
-      border: 1px solid var(--b1);
-      border-radius: var(--r);
-      transition: border-color .15s, background .15s
-    }
-
-    .sr:hover {
-      background: var(--bg3);
-      border-color: var(--b2)
-    }
-
-    .sr.r-ok {
-      border-left: 2px solid rgba(74, 222, 128, .3)
-    }
-
-    .sr.r-slow {
-      border-left: 2px solid rgba(251, 191, 36, .3)
-    }
-
-    .sr.r-block {
-      border-left: 2px solid rgba(248, 113, 113, .3)
-    }
-
-    .sr.hidden {
-      display: none
-    }
-
-    @media(max-width:800px) {
-
-      .sr,
-      .chdr {
-        grid-template-columns: 1fr 95px 85px
-      }
-
-      .cb,
-      .cp2 {
-        display: none
-      }
-    }
-
-    @media(max-width:500px) {
-
-      .sr,
-      .chdr {
-        grid-template-columns: 1fr 80px
-      }
-
-      .cb,
-      .cp1,
-      .cp2 {
-        display: none
-      }
-    }
-
-    .snw {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      min-width: 0
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      background: var(--bg5);
-      transition: background .3s
-    }
-
-    .dot.waiting {
-      background: var(--bg5)
-    }
-
-    .dot.checking {
-      background: var(--ac);
-      animation: pulse 1s ease infinite
-    }
-
-    .dot.ok {
-      background: var(--gn)
-    }
-
-    .dot.slow {
-      background: var(--am)
-    }
-
-    .dot.block {
-      background: var(--rd)
-    }
-
-    @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1
-      }
-
-      50% {
-        opacity: .25
-      }
-    }
-
-    .sn {
-      font-size: 13px;
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis
-    }
-
-    .sh {
-      font-size: 10px;
-      color: var(--tx3);
-      margin-top: 1px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis
-    }
-
-    .bo {
-      height: 4px;
-      background: var(--bg4);
-      border-radius: 2px;
-      overflow: hidden
-    }
-
-    .bi2 {
-      height: 100%;
-      border-radius: 2px;
-      width: 0%;
-      transition: width .5s ease
-    }
-
-    .bi2.ok {
-      background: var(--gn)
-    }
-
-    .bi2.slow {
-      background: var(--am)
-    }
-
-    .bi2.block {
-      background: var(--rd)
-    }
-
-    .p1 {
-      font-size: 12px;
-      font-weight: 500;
-      text-align: right;
-      font-feature-settings: "tnum";
-      color: var(--tx3);
-      transition: color .3s
-    }
-
-    .p1.ok {
-      color: var(--gn)
-    }
-
-    .p1.slow {
-      color: var(--am)
-    }
-
-    .p1.block {
-      color: var(--rd)
-    }
-
-    .p2 {
-      font-size: 12px;
-      font-weight: 500;
-      text-align: right;
-      font-feature-settings: "tnum";
-      color: var(--tx3);
-      transition: color .3s
-    }
-
-    .p2.ok {
-      color: var(--bl)
-    }
-
-    .p2.slow {
-      color: #fb923c
-    }
-
-    .p2.block {
-      color: var(--rd)
-    }
-
-    .pl {
-      font-size: 9px;
-      color: var(--tx3);
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      text-align: right;
-      margin-top: 1px
-    }
-
-    .sb {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: .06em;
-      padding: 3px 9px;
-      border-radius: 5px;
-      text-align: center;
-      border: 1px solid var(--b1);
-      background: var(--bg4);
-      color: var(--tx3);
-      transition: all .3s;
-      white-space: nowrap
-    }
-
-    .sb.ok {
-      background: var(--gn-bg);
-      color: var(--gn);
-      border-color: var(--gn-bd)
-    }
-
-    .sb.slow {
-      background: var(--am-bg);
-      color: var(--am);
-      border-color: var(--am-bd)
-    }
-
-    .sb.block {
-      background: var(--rd-bg);
-      color: var(--rd);
-      border-color: var(--rd-bd)
-    }
-
-    .crr {
-      display: grid;
-      grid-template-columns: 1fr 150px 105px 105px 96px;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 14px;
-      background: var(--bg3);
-      border: 1px solid var(--b2);
-      border-radius: var(--r);
-      animation: fadeIn .25s ease
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-3px)
-      }
-
-      to {
-        opacity: 1;
-        transform: none
-      }
-    }
-
-    @media(max-width:800px) {
-      .crr {
-        grid-template-columns: 1fr 95px 85px
-      }
-    }
-
-    .legend {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-      margin-bottom: 20px
-    }
-
-    .leg {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      color: var(--tx3)
-    }
-
-    .ld {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      flex-shrink: 0
-    }
-
-    .footer {
-      margin-top: 56px;
-      padding-top: 20px;
-      border-top: 1px solid var(--b1);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 12px
-    }
-
-    .fn {
-      font-size: 11px;
-      color: var(--tx3);
-      max-width: 580px;
-      line-height: 1.8
-    }
-
-    .fn b {
-      color: var(--tx2);
-      font-weight: 500
-    }
-
-    .fb {
-      font-size: 10px;
-      color: var(--tx3);
-      letter-spacing: .08em
-    }
-
-    .fb a {
-      color: var(--ac);
-      text-decoration: none
-    }
-
-    .fb a:hover {
-      text-decoration: underline
-    }
-
-    ::-webkit-scrollbar {
-      width: 5px
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--bg5);
-      border-radius: 3px
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
 </head>
 
 <body>
@@ -1218,38 +32,46 @@
         </div>
         <div>
           <div class="logo-name">Reachability Check</div>
-          <div class="logo-sub">Bağlantı Denetleyici</div>
+          <div class="logo-sub" data-i18n="logo_sub">Bağlantı Denetleyici</div>
         </div>
       </div>
-      <div class="hdr-r">son test: <span id="lastRun">—</span></div>
+      <div class="hdr-r">
+        <div class="lang-sw" style="margin-bottom: 8px; justify-content: flex-end;">
+          <button class="lang-btn" onclick="changeLanguage('tr')">TR</button>
+          <button class="lang-btn" onclick="changeLanguage('en')">EN</button>
+        </div>
+        <span data-i18n="last_test">son test:</span> <span id="lastRun">—</span>
+      </div>
     </header>
 
     <div class="ip-grid">
       <div class="ip-card">
-        <div class="ip-lbl">Yerel IP</div>
-        <div class="ip-val loading" id="localIp">Tespit ediliyor…</div>
-        <div class="ip-sub" id="localSub">WebRTC</div>
+        <div class="ip-lbl" data-i18n="ip.local">Yerel IP</div>
+        <div class="ip-val loading" id="localIp" data-i18n="ip.detecting">Tespit ediliyor…</div>
+        <div class="ip-sub" id="localSub" data-i18n="ip.local_sub">WebRTC</div>
       </div>
       <div class="ip-card">
-        <div class="ip-lbl">Genel IP</div>
-        <div class="ip-val loading" id="pubIp">Sorgulanıyor…</div>
-        <div class="ip-sub" id="pubSub">ipify.org</div>
+        <div class="ip-lbl" data-i18n="ip.public">Genel IP</div>
+        <div class="ip-val loading" id="pubIp" data-i18n="ip.querying">Sorgulanıyor…</div>
+        <div class="ip-sub" id="pubSub" data-i18n="ip.public_sub">ipify.org</div>
       </div>
     </div>
 
     <!-- Custom Query -->
     <div class="panel">
       <div class="ph" onclick="togglePanel(this)">
-        <span class="ph-icon">⊕</span><span class="ph-title">Özel Sorgu</span>
-        <span class="ph-badge" id="cqBadge">herhangi bir URL</span><span class="ph-chev">▼</span>
+        <span class="ph-icon">⊕</span><span class="ph-title" data-i18n="panel.custom_query">Özel Sorgu</span>
+        <span class="ph-badge" id="cqBadge" data-i18n="status.any_url">herhangi bir URL</span><span
+          class="ph-chev">▼</span>
       </div>
       <div class="pb">
-        <p class="p-desc">Herhangi bir URL veya domain girerek anlık erişim testi yap.</p>
+        <p class="p-desc" data-i18n="panel.custom_query_desc">Herhangi bir URL veya domain girerek anlık erişim testi
+          yap.</p>
         <div class="row">
-          <input class="inp" id="cqInp" type="text" placeholder="https://ornek.com veya ornek.com"
-            onkeydown="if(event.key==='Enter')runCustom()" />
+          <input class="inp" id="cqInp" type="text" data-i18n-placeholder="panel.custom_query_placeholder"
+            placeholder="https://ornek.com veya ornek.com" onkeydown="if(event.key==='Enter')runCustom()" />
           <button class="btn-q" id="cqBtn" onclick="runCustom()">
-            <div class="qs"></div><span class="qi">Test Et →</span>
+            <div class="qs"></div><span class="qi" data-i18n="buttons.test">Test Et →</span>
           </button>
         </div>
         <div id="cqResults" style="display:flex;flex-direction:column;gap:6px"></div>
@@ -1259,24 +81,27 @@
     <!-- Pack Loader -->
     <div class="panel">
       <div class="ph" onclick="togglePanel(this)">
-        <span class="ph-icon">◈</span><span class="ph-title">Servis Paketleri</span>
-        <span class="ph-badge" id="packBadge">varsayılan liste aktif</span><span class="ph-chev">▼</span>
+        <span class="ph-icon">◈</span><span class="ph-title" data-i18n="panel.service_packs">Servis Paketleri</span>
+        <span class="ph-badge" id="packBadge" data-i18n="status.default_list_active">varsayılan liste aktif</span><span
+          class="ph-chev">▼</span>
       </div>
       <div class="pb">
-        <p class="p-desc">Topluluk paketlerini seç, URL'den yükle veya kendi JSON dosyanı sürükle-bırak. <a
+        <p class="p-desc"><span data-i18n="panel.service_packs_desc">Topluluk paketlerini seç, URL'den yükle veya kendi
+            JSON dosyanı sürükle-bırak.</span> <a
             href="https://github.com/abdullahaligun/reachability-check/blob/main/CONTRIBUTING.md" target="_blank"
-            style="color:var(--ac)">Paket şeması →</a></p>
+            style="color:var(--ac)" data-i18n="panel.package_schema">Paket şeması →</a></p>
         <div class="pack-grid" id="packGrid"></div>
         <div class="row">
           <input class="inp" id="packUrl" type="text" placeholder="JSON URL — https://raw.githubusercontent.com/..." />
           <button class="btn-q" id="packUrlBtn" onclick="loadPackUrl()">
-            <div class="qs"></div><span class="qi">Yükle →</span>
+            <div class="qs"></div><span class="qi" data-i18n="buttons.load">Yükle →</span>
           </button>
         </div>
         <div class="drop" id="packDrop">
           <div class="di">⊕</div>
-          <div class="dt">JSON dosyasını buraya sürükle-bırak</div>
-          <div class="ds">veya <label class="dl" for="packFile">dosya seç</label></div>
+          <div class="dt" data-i18n="drop.pack">JSON dosyasını buraya sürükle-bırak</div>
+          <div class="ds"><span data-i18n="drop.or">veya</span> <label class="dl" for="packFile"
+              data-i18n="drop.select_file">dosya seç</label></div>
           <input type="file" id="packFile" accept=".json" style="display:none" onchange="loadPackFile(this)" />
         </div>
         <div class="pmsg" id="packMsg"></div>
@@ -1286,42 +111,51 @@
     <!-- RuleCheck -->
     <div class="panel">
       <div class="ph" onclick="togglePanel(this)">
-        <span class="ph-icon">◆</span><span class="ph-title">RuleCheck — Politika Denetimi</span>
-        <span class="ph-badge" id="ruleBadge">kural yüklü değil</span><span class="ph-chev">▼</span>
+        <span class="ph-icon">◆</span><span class="ph-title" data-i18n="panel.rule_check">RuleCheck — Politika
+          Denetimi</span>
+        <span class="ph-badge" id="ruleBadge" data-i18n="status.no_rule_loaded">kural yüklü değil</span><span
+          class="ph-chev">▼</span>
       </div>
       <div class="pb">
-        <p class="p-desc">Kurumsal ağ politikası veya özel kural seti yükle. Her kural, servisin erişilebilir
-          <em>olması</em> ya da <em>engellenmesi</em> gerektiğini belirtir. Opsiyonel ping eşiği eklenebilir. <a
-            href="https://github.com/abdullahaligun/reachability-check/tree/main/rulesets" target="_blank"
-            style="color:var(--ac)">Örnek rulesets →</a></p>
+        <p class="p-desc" data-i18n="panel.rule_check_desc">Kurumsal ağ politikası veya özel kural seti yükle. Her
+          kural, servisin erişilebilir
+          <em>olması</em> ya da <em>engellenmesi</em> gerektiğini belirtir. Opsiyonel ping eşiği eklenebilir.
+        </p>
+        <p class="p-desc"><a href="https://github.com/abdullahaligun/reachability-check/tree/main/rulesets"
+            target="_blank" style="color:var(--ac)" data-i18n="panel.example_rulesets">Örnek rulesets →</a></p>
         <div class="row">
           <input class="inp" id="ruleUrl" type="text" placeholder="Ruleset JSON URL veya aşağıya dosya sürükle" />
           <button class="btn-q" id="ruleUrlBtn" onclick="loadRuleUrl()">
-            <div class="qs"></div><span class="qi">Yükle →</span>
+            <div class="qs"></div><span class="qi" data-i18n="buttons.load">Yükle →</span>
           </button>
         </div>
         <div class="drop" id="ruleDrop">
           <div class="di">⊕</div>
-          <div class="dt">Ruleset JSON dosyasını buraya sürükle-bırak</div>
-          <div class="ds">veya <label class="dl" for="ruleFile">dosya seç</label></div>
+          <div class="dt" data-i18n="drop.rule">Ruleset JSON dosyasını buraya sürükle-bırak</div>
+          <div class="ds"><span data-i18n="drop.or">veya</span> <label class="dl" for="ruleFile"
+              data-i18n="drop.select_file">dosya seç</label></div>
           <input type="file" id="ruleFile" accept=".json" style="display:none" onchange="loadRuleFile(this)" />
         </div>
         <div id="ruleList" style="margin-top:14px;display:flex;flex-direction:column;gap:6px"></div>
         <div class="rule-actions" id="ruleActions" style="display:none">
           <button class="btn-q" id="ruleRunBtn" onclick="runRuleCheck()">
-            <div class="qs"></div><span class="qi">▶ Kuralları Test Et</span>
+            <div class="qs"></div><span class="qi" data-i18n="controls.test_rules">▶ Kuralları Test Et</span>
           </button>
-          <button class="btn-q" onclick="clearRules()"
-            style="color:var(--rd);border-color:var(--rd-bd)">Temizle</button>
+          <button class="btn-q" onclick="clearRules()" style="color:var(--rd);border-color:var(--rd-bd)"
+            data-i18n="controls.clear">Temizle</button>
         </div>
       </div>
     </div>
 
     <div class="legend">
-      <span class="leg"><span class="ld" style="background:var(--gn)"></span>Fetch hızlı &lt;200ms</span>
-      <span class="leg"><span class="ld" style="background:var(--am)"></span>Yavaş 200–800ms</span>
-      <span class="leg"><span class="ld" style="background:var(--rd)"></span>Engelli / Timeout</span>
-      <span class="leg"><span class="ld" style="background:var(--bl)"></span>Image ping hızlı</span>
+      <span class="leg"><span class="ld" style="background:var(--gn)"></span><span data-i18n="legend.fast">Fetch hızlı
+          &lt;200ms</span></span>
+      <span class="leg"><span class="ld" style="background:var(--am)"></span><span data-i18n="legend.slow">Yavaş
+          200–800ms</span></span>
+      <span class="leg"><span class="ld" style="background:var(--rd)"></span><span data-i18n="legend.blocked">Engelli /
+          Timeout</span></span>
+      <span class="leg"><span class="ld" style="background:var(--bl)"></span><span data-i18n="legend.image_ping">Image
+          ping hızlı</span></span>
     </div>
 
     <div class="ctrl">
@@ -1329,204 +163,66 @@
         <span class="bi"><svg width="12" height="12" viewBox="0 0 12 12">
             <path d="M2.5 2L9.5 6L2.5 10V2Z" fill="white" />
           </svg></span>
-        <div class="sp"></div>Tümünü Test Et
+        <div class="sp"></div><span data-i18n="controls.test_all">Tümünü Test Et</span>
       </button>
       <div class="pw">
         <div class="po">
           <div class="pi" id="progBar"></div>
         </div>
-        <div class="pt" id="progTxt">Hazır</div>
+        <div class="pt" id="progTxt" data-i18n="status.ready">Hazır</div>
       </div>
     </div>
 
     <div class="sum" id="sumRow" style="display:none">
-      <div class="sp2"><span class="sd" style="background:var(--gn)"></span><span class="sc" id="cntOk">0</span> hızlı
+      <div class="sp2"><span class="sd" style="background:var(--gn)"></span><span class="sc" id="cntOk">0</span> <span
+          data-i18n="controls.fast">hızlı</span>
       </div>
-      <div class="sp2"><span class="sd" style="background:var(--am)"></span><span class="sc" id="cntSlow">0</span> yavaş
+      <div class="sp2"><span class="sd" style="background:var(--am)"></span><span class="sc" id="cntSlow">0</span> <span
+          data-i18n="controls.slow">yavaş</span>
       </div>
       <div class="sp2"><span class="sd" style="background:var(--rd)"></span><span class="sc" id="cntBlock">0</span>
-        engelli</div>
+        <span data-i18n="controls.blocked">engelli</span>
+      </div>
       <div class="sp2"><span class="sd" style="background:var(--tx3)"></span>Ort. <span class="sc" id="avgMs"
           style="margin-left:3px">—</span> ms</div>
     </div>
 
     <div class="toolbar">
-      <span class="tl">Filtre:</span>
-      <button class="chip a" id="f-all" onclick="setFilter('all')">Tümü</button>
-      <button class="chip" id="f-ok" onclick="setFilter('ok')">Hızlı</button>
-      <button class="chip" id="f-slow" onclick="setFilter('slow')">Yavaş</button>
-      <button class="chip" id="f-block" onclick="setFilter('block')">Engelli</button>
+      <span class="tl" data-i18n="controls.filter">Filtre:</span>
+      <button class="chip a" id="f-all" onclick="setFilter('all')" data-i18n="controls.all">Tümü</button>
+      <button class="chip" id="f-ok" onclick="setFilter('ok')" data-i18n="controls.fast">Hızlı</button>
+      <button class="chip" id="f-slow" onclick="setFilter('slow')" data-i18n="controls.slow">Yavaş</button>
+      <button class="chip" id="f-block" onclick="setFilter('block')" data-i18n="controls.blocked">Engelli</button>
       <div class="tsep"></div>
-      <span class="tl">Grupla:</span>
-      <button class="chip a" id="g-cat" onclick="setGroup('cat')">Kategori</button>
-      <button class="chip" id="g-status" onclick="setGroup('status')">Durum</button>
-      <button class="chip" id="g-flat" onclick="setGroup('flat')">Düz Liste</button>
+      <span class="tl" data-i18n="controls.group">Grupla:</span>
+      <button class="chip a" id="g-cat" onclick="setGroup('cat')" data-i18n="controls.category">Kategori</button>
+      <button class="chip" id="g-status" onclick="setGroup('status')" data-i18n="controls.status">Durum</button>
+      <button class="chip" id="g-flat" onclick="setGroup('flat')" data-i18n="controls.flat_list">Düz Liste</button>
       <div class="tsep"></div>
-      <span class="tl">Sırala:</span>
+      <span class="tl" data-i18n="controls.sort">Sırala:</span>
       <select class="ss" id="sortSel" onchange="applyView()">
-        <option value="default">Varsayılan</option>
-        <option value="ping-asc">Ping ↑</option>
-        <option value="ping-desc">Ping ↓</option>
-        <option value="name-asc">İsim A–Z</option>
-        <option value="name-desc">İsim Z–A</option>
+        <option value="default" data-i18n="controls.sort_default">Varsayılan</option>
+        <option value="ping-asc" data-i18n="controls.sort_ping_asc">Ping ↑</option>
+        <option value="ping-desc" data-i18n="controls.sort_ping_desc">Ping ↓</option>
+        <option value="name-asc" data-i18n="controls.sort_name_asc">İsim A–Z</option>
+        <option value="name-desc" data-i18n="controls.sort_name_desc">İsim Z–A</option>
       </select>
     </div>
 
     <div id="gc"></div>
 
     <footer class="footer">
-      <div class="fn">⚠ Tarayıcıdan ICMP ping atılamaz. <b>HTTP Fetch</b>: HEAD round-trip — en güvenilir. <b>Image
+      <div class="fn" data-i18n="footer.note">⚠ Tarayıcıdan ICMP ping atılamaz. <b>HTTP Fetch</b>: HEAD round-trip — en
+        güvenilir. <b>Image
           Ping</b>: Servisin kendi favicon'u — düşük overhead. Her ikisi de engelli gösteriyorsa kısıtlama büyük
         ihtimalle gerçektir.</div>
-      <div class="fb">Reachability Check v2.0 &nbsp;·&nbsp; <a
-          href="https://github.com/abdullahaligun/reachability-check" target="_blank">GitHub</a> &nbsp;·&nbsp; MIT
+      <div class="fb">Reachability Check &nbsp;·&nbsp; <a href="https://github.com/abdullahaligun/reachability-check"
+          target="_blank">GitHub</a> &nbsp;·&nbsp; MIT
         &nbsp;·&nbsp; <a href="https://github.com/abdullahaligun" target="_blank">@abdullahaligun</a></div>
     </footer>
   </div>
-  <script>
-    const DEFAULTS = [
-      {
-        group: 'Sosyal Medya', icon: '◈', items: [
-          { name: 'Instagram', host: 'instagram.com', url: 'https://www.instagram.com', favicon: 'https://www.instagram.com/favicon.ico' },
-          { name: 'X / Twitter', host: 'x.com', url: 'https://x.com', favicon: 'https://abs.twimg.com/favicons/twitter.3.ico' },
-          { name: 'Facebook', host: 'facebook.com', url: 'https://www.facebook.com', favicon: 'https://www.facebook.com/favicon.ico' },
-          { name: 'TikTok', host: 'tiktok.com', url: 'https://www.tiktok.com', favicon: 'https://www.tiktok.com/favicon.ico' },
-          { name: 'LinkedIn', host: 'linkedin.com', url: 'https://www.linkedin.com', favicon: 'https://www.linkedin.com/favicon.ico' },
-          { name: 'YouTube', host: 'youtube.com', url: 'https://www.youtube.com', favicon: 'https://www.youtube.com/favicon.ico' },
-          { name: 'Reddit', host: 'reddit.com', url: 'https://www.reddit.com', favicon: 'https://www.reddit.com/favicon.ico' },
-          { name: 'Twitch', host: 'twitch.tv', url: 'https://www.twitch.tv', favicon: 'https://www.twitch.tv/favicon.ico' },
-        ]
-      },
-      {
-        group: 'AI Servisleri', icon: '◆', items: [
-          { name: 'Claude', host: 'claude.ai', url: 'https://claude.ai', favicon: 'https://claude.ai/favicon.ico' },
-          { name: 'ChatGPT', host: 'chat.openai.com', url: 'https://chat.openai.com', favicon: 'https://chat.openai.com/favicon.ico' },
-          { name: 'Gemini', host: 'gemini.google.com', url: 'https://gemini.google.com', favicon: 'https://www.google.com/favicon.ico' },
-          { name: 'Perplexity', host: 'perplexity.ai', url: 'https://www.perplexity.ai', favicon: 'https://www.perplexity.ai/favicon.ico' },
-          { name: 'Midjourney', host: 'midjourney.com', url: 'https://www.midjourney.com', favicon: 'https://www.midjourney.com/favicon.ico' },
-          { name: 'Hugging Face', host: 'huggingface.co', url: 'https://huggingface.co', favicon: 'https://huggingface.co/favicon.ico' },
-          { name: 'Mistral', host: 'mistral.ai', url: 'https://mistral.ai', favicon: 'https://mistral.ai/favicon.ico' },
-        ]
-      },
-      {
-        group: 'İletişim', icon: '◉', items: [
-          { name: 'WhatsApp', host: 'whatsapp.com', url: 'https://web.whatsapp.com', favicon: 'https://web.whatsapp.com/favicon.ico' },
-          { name: 'Telegram', host: 'telegram.org', url: 'https://web.telegram.org', favicon: 'https://web.telegram.org/favicon.ico' },
-          { name: 'Discord', host: 'discord.com', url: 'https://discord.com', favicon: 'https://discord.com/favicon.ico' },
-          { name: 'Slack', host: 'slack.com', url: 'https://slack.com', favicon: 'https://slack.com/favicon.ico' },
-          { name: 'Zoom', host: 'zoom.us', url: 'https://zoom.us', favicon: 'https://zoom.us/favicon.ico' },
-          { name: 'Signal', host: 'signal.org', url: 'https://signal.org', favicon: 'https://signal.org/favicon.ico' },
-        ]
-      },
-      {
-        group: 'Arama & Haber', icon: '◎', items: [
-          { name: 'Google', host: 'google.com', url: 'https://www.google.com', favicon: 'https://www.google.com/favicon.ico' },
-          { name: 'DuckDuckGo', host: 'duckduckgo.com', url: 'https://duckduckgo.com', favicon: 'https://duckduckgo.com/favicon.ico' },
-          { name: 'Wikipedia', host: 'wikipedia.org', url: 'https://en.wikipedia.org', favicon: 'https://en.wikipedia.org/favicon.ico' },
-          { name: 'BBC News', host: 'bbc.com', url: 'https://www.bbc.com', favicon: 'https://www.bbc.com/favicon.ico' },
-          { name: 'Reuters', host: 'reuters.com', url: 'https://www.reuters.com', favicon: 'https://www.reuters.com/favicon.ico' },
-        ]
-      },
-      {
-        group: 'Geliştirici', icon: '◇', items: [
-          { name: 'GitHub', host: 'github.com', url: 'https://github.com', favicon: 'https://github.com/favicon.ico' },
-          { name: 'GitLab', host: 'gitlab.com', url: 'https://gitlab.com', favicon: 'https://gitlab.com/favicon.ico' },
-          { name: 'Stack Overflow', host: 'stackoverflow.com', url: 'https://stackoverflow.com', favicon: 'https://stackoverflow.com/favicon.ico' },
-          { name: 'npm', host: 'npmjs.com', url: 'https://www.npmjs.com', favicon: 'https://www.npmjs.com/favicon.ico' },
-          { name: 'Cloudflare', host: 'cloudflare.com', url: 'https://www.cloudflare.com', favicon: 'https://www.cloudflare.com/favicon.ico' },
-          { name: 'Vercel', host: 'vercel.com', url: 'https://vercel.com', favicon: 'https://vercel.com/favicon.ico' },
-        ]
-      },
-      {
-        group: 'Medya & Depolama', icon: '◐', items: [
-          { name: 'Spotify', host: 'spotify.com', url: 'https://open.spotify.com', favicon: 'https://open.spotify.com/favicon.ico' },
-          { name: 'Netflix', host: 'netflix.com', url: 'https://www.netflix.com', favicon: 'https://www.netflix.com/favicon.ico' },
-          { name: 'Google Drive', host: 'drive.google.com', url: 'https://drive.google.com', favicon: 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png' },
-          { name: 'Dropbox', host: 'dropbox.com', url: 'https://www.dropbox.com', favicon: 'https://www.dropbox.com/favicon.ico' },
-          { name: 'OneDrive', host: 'onedrive.live.com', url: 'https://onedrive.live.com', favicon: 'https://onedrive.live.com/favicon.ico' },
-        ]
-      },
-    ];
-
-    const PACKS = [
-      { id: 'social-media', name: 'Sosyal Medya', icon: '◈', tags: ['social', 'media'], count: 10, url: 'https://raw.githubusercontent.com/abdullahaligun/reachability-check/main/services/social-media.json' },
-      { id: 'ai-services', name: 'AI Servisleri', icon: '◆', tags: ['ai', 'llm'], count: 11, url: 'https://raw.githubusercontent.com/abdullahaligun/reachability-check/main/services/ai-services.json' },
-      { id: 'communication', name: 'İletişim Araçları', icon: '◉', tags: ['messaging'], count: 10, url: 'https://raw.githubusercontent.com/abdullahaligun/reachability-check/main/services/communication.json' },
-      { id: 'developer-tools', name: 'Geliştirici', icon: '◇', tags: ['git', 'devops'], count: 11, url: 'https://raw.githubusercontent.com/abdullahaligun/reachability-check/main/services/developer-tools.json' },
-      { id: 'news-search', name: 'Arama & Haber', icon: '◎', tags: ['news', 'search'], count: 9, url: 'https://raw.githubusercontent.com/abdullahaligun/reachability-check/main/services/news-search.json' },
-      { id: 'media-storage', name: 'Medya & Depolama', icon: '◐', tags: ['media', 'storage'], count: 8, url: 'https://raw.githubusercontent.com/abdullahaligun/reachability-check/main/services/media-storage.json' },
-    ];
-
-    let SVCS = DEFAULTS.map(g => ({ ...g, items: [...g.items] }));
-    let results = {}, activeRules = null, vF = 'all', vG = 'cat';
-    const loadedIds = new Set();
-    const slug = s => s.replace(/[^a-z0-9]/gi, '_');
-
-    /* IP */
-    async function getPublicIP() { try { const d = await (await fetch('https://api.ipify.org?format=json')).json(); const el = document.getElementById('pubIp'); el.textContent = d.ip; el.classList.remove('loading'); document.getElementById('pubSub').textContent = 'IPv4 — genel adres'; } catch { const el = document.getElementById('pubIp'); el.textContent = 'alınamadı'; el.classList.remove('loading'); } }
-    function getLocalIP() { try { const pc = new RTCPeerConnection({ iceServers: [] }); pc.createDataChannel(''); pc.createOffer().then(o => pc.setLocalDescription(o)); pc.onicecandidate = e => { if (!e?.candidate) return; const m = /([0-9]{1,3}(?:\.[0-9]{1,3}){3})/.exec(e.candidate.candidate); if (m && m[1] !== '0.0.0.0' && !m[1].startsWith('192.0.2')) { const el = document.getElementById('localIp'); el.textContent = m[1]; el.classList.remove('loading'); document.getElementById('localSub').textContent = 'LAN adresi (WebRTC)'; pc.close(); } }; setTimeout(() => { const el = document.getElementById('localIp'); if (el.classList.contains('loading')) { el.textContent = 'tespit edilemedi'; el.classList.remove('loading'); } }, 4000); } catch { const el = document.getElementById('localIp'); el.textContent = 'izin yok'; el.classList.remove('loading'); } }
-
-    /* Measurement */
-    function doFetch(url) { return new Promise(res => { const t = performance.now(), ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 8000); fetch(url, { method: 'HEAD', mode: 'no-cors', signal: ctrl.signal, cache: 'no-store' }).then(() => { clearTimeout(timer); res({ ms: Math.round(performance.now() - t), ok: true }); }).catch(() => { const ms = Math.round(performance.now() - t); res({ ms: ms < 80 ? null : ms, ok: false }); }); }); }
-    function doImg(fav) { return new Promise(res => { const img = new Image(), t = performance.now(); const timer = setTimeout(() => { img.src = ''; res({ ms: null, ok: false }); }, 7000); const done = () => { clearTimeout(timer); const ms = Math.round(performance.now() - t); res({ ms, ok: ms > 8 }); }; img.onload = img.onerror = done; img.src = fav + '?_=' + Date.now(); }); }
-    async function checkOne(svc) { const k = slug(svc.name); markCheck(k); const [fr, ir] = await Promise.all([doFetch(svc.url), doImg(svc.favicon)]); const fOk = fr.ok && fr.ms !== null, iOk = ir.ok && ir.ms !== null && ir.ms > 8, reach = fOk || iOk, best = fOk ? fr.ms : (iOk ? ir.ms : null), state = !reach ? 'block' : best < 200 ? 'ok' : 'slow'; return { k, state, ms: best, fetchMs: fr.ms, fetchOk: fOk, imgMs: ir.ms, imgOk: iOk, name: svc.name, group: svc._group || '—' }; }
-
-    /* DOM */
-    function markCheck(k) { const d = document.getElementById('dot_' + k); if (d) d.className = 'dot checking'; const b = document.getElementById('badge_' + k); if (b) b.textContent = 'test…'; const p = document.getElementById('p2_' + k); if (p) { p.textContent = '…'; p.className = 'p2'; } }
-    function applyRow(r) { const dot = document.getElementById('dot_' + r.k), bar = document.getElementById('bar_' + r.k), p1 = document.getElementById('p1_' + r.k), p2 = document.getElementById('p2_' + r.k), badge = document.getElementById('badge_' + r.k), row = document.getElementById('row_' + r.k); if (!dot) return; dot.className = 'dot ' + r.state; bar.className = 'bi2 ' + r.state; bar.style.width = r.state === 'ok' ? Math.max(8, 100 - (r.ms || 0) / 3) + '%' : r.state === 'slow' ? Math.max(8, 55 - (r.ms || 0) / 20) + '%' : '0%'; const fs = !r.fetchOk ? 'block' : r.fetchMs < 200 ? 'ok' : 'slow'; p1.className = 'p1 ' + fs; p1.textContent = r.fetchOk ? r.fetchMs + ' ms' : '—'; if (p2) { const is = !r.imgOk ? 'block' : r.imgMs < 200 ? 'ok' : 'slow'; p2.className = 'p2 ' + is; p2.textContent = r.imgOk ? r.imgMs + ' ms' : '—'; } badge.className = 'sb ' + r.state; badge.textContent = { ok: 'hızlı', slow: 'yavaş', block: 'engelli' }[r.state]; if (row) row.className = 'sr r-' + r.state; results[r.k] = r; }
-    function makeRow(svc) { const k = slug(svc.name), d = document.createElement('div'); d.className = 'sr'; d.id = 'row_' + k; d.innerHTML = `<div class="snw"><div class="dot waiting" id="dot_${k}"></div><div><div class="sn">${svc.name}</div><div class="sh">${svc.host}</div></div></div><div class="cb"><div class="bo"><div class="bi2" id="bar_${k}"></div></div></div><div class="cp1"><div class="p1" id="p1_${k}">—</div><div class="pl">fetch</div></div><div class="cp2"><div class="p2" id="p2_${k}">—</div><div class="pl" style="color:rgba(56,189,248,.4)">img</div></div><div><div class="sb" id="badge_${k}">bekliyor</div></div>`; return d; }
-    function makeHdr() { const d = document.createElement('div'); d.className = 'chdr'; d.innerHTML = '<div class="ch" style="text-align:left">Servis</div><div class="ch cb">Gecikme</div><div class="ch cp1">HTTP Fetch</div><div class="ch cp2" style="color:rgba(56,189,248,.5)">Image Ping</div><div class="ch">Durum</div>'; return d; }
-    function makeGroup(title, icon, gid) { const g = document.createElement('div'); g.className = 'group'; g.innerHTML = `<div class="gh"><div class="gi">${icon}</div><div class="gt">${title}</div><div class="gs" id="gs_${gid}"></div></div>`; const l = document.createElement('div'); l.className = 'sl'; l.id = 'list_' + gid; l.appendChild(makeHdr()); g.appendChild(l); return g; }
-
-    /* View */
-    function updSum() { let ok = 0, slow = 0, block = 0, tot = 0, cnt = 0; Object.values(results).forEach(r => { if (r.state === 'ok') { ok++; if (r.ms) { tot += r.ms; cnt++; } } if (r.state === 'slow') { slow++; if (r.ms) { tot += r.ms; cnt++; } } if (r.state === 'block') block++; }); document.getElementById('cntOk').textContent = ok; document.getElementById('cntSlow').textContent = slow; document.getElementById('cntBlock').textContent = block; document.getElementById('avgMs').textContent = cnt > 0 ? Math.round(tot / cnt) : '—'; }
-    function updGS(g) { const el = document.getElementById('gs_' + slug(g.group)); if (!el) return; let ok = 0, block = 0; g.items.forEach(s => { const r = results[slug(s.name)]; if (!r) return; r.state === 'block' ? block++ : ok++; }); const total = g.items.length, done = ok + block; if (!done) { el.textContent = ''; return; } el.textContent = `${ok}/${total} erişilebilir`; el.className = 'gs' + (block > 0 ? ' bad' : done === total ? ' all' : ''); }
-    function sorted() { const s = document.getElementById('sortSel').value, all = SVCS.flatMap(g => g.items.map(i => ({ ...i, _group: g.group }))); return all.sort((a, b) => { if (s === 'default') return 0; if (s === 'name-asc') return a.name.localeCompare(b.name, 'tr'); if (s === 'name-desc') return b.name.localeCompare(a.name, 'tr'); const ra = results[slug(a.name)], rb = results[slug(b.name)], ma = ra?.ms ?? (s === 'ping-asc' ? 999999 : 0), mb = rb?.ms ?? (s === 'ping-asc' ? 999999 : 0); return s === 'ping-asc' ? ma - mb : mb - ma; }); }
-    function pf(r) { return vF === 'all' || r?.state === vF; }
-    function setFilter(f) { vF = f;['all', 'ok', 'slow', 'block'].forEach(x => { const b = document.getElementById('f-' + x); b.className = 'chip' + (x === f ? (x === 'all' ? ' a' : ' a-' + (x === 'ok' ? 'gn' : x === 'slow' ? 'am' : 'rd')) : ''); }); applyView(); }
-    function setGroup(g) { vG = g;['cat', 'status', 'flat'].forEach(x => { document.getElementById('g-' + x).className = 'chip' + (x === g ? ' a' : ''); }); applyView(); }
-    function applyView() {
-      const c = document.getElementById('gc'); c.innerHTML = ''; const items = sorted();
-      if (vG === 'flat') { const box = makeGroup('Tüm Servisler', '◉', 'flat'); c.appendChild(box); const l = document.getElementById('list_flat'); let vis = 0; items.forEach(svc => { const r = results[slug(svc.name)], row = makeRow(svc); if (!pf(r)) row.classList.add('hidden'); else vis++; l.appendChild(row); if (r) applyRow(r); }); const el = document.getElementById('gs_flat'); if (el && vis) el.textContent = vis + ' servis'; }
-      else if (vG === 'status') { [{ st: 'ok', t: 'Hızlı', i: '◈' }, { st: 'slow', t: 'Yavaş', i: '◎' }, { st: 'block', t: 'Engelli', i: '◆' }, { st: 'pending', t: 'Bekleniyor', i: '◇' }].forEach(sg => { const m = items.filter(s => sg.st === 'pending' ? !results[slug(s.name)] : results[slug(s.name)]?.state === sg.st); if (!m.length) return; if (vF !== 'all' && sg.st !== vF && sg.st !== 'pending') return; const gid = 'sg_' + sg.st, box = makeGroup(`${sg.t} — ${m.length}`, sg.i, gid); c.appendChild(box); m.forEach(svc => { const row = makeRow(svc); document.getElementById('list_' + gid).appendChild(row); const r = results[slug(svc.name)]; if (r) applyRow(r); }); }); }
-      else { SVCS.forEach(g => { const gk = slug(g.group), box = makeGroup(g.group, g.icon, gk); c.appendChild(box); const l = document.getElementById('list_' + gk), vis = items.filter(s => s._group === g.group && pf(results[slug(s.name)])); if (!vis.length) { const e = document.createElement('div'); e.className = 'ge'; e.textContent = 'Bu filtrede servis yok.'; l.appendChild(e); } else vis.forEach(svc => { const row = makeRow(svc); l.appendChild(row); const r = results[slug(svc.name)]; if (r) applyRow(r); }); updGS(g); }); }
-    }
-
-    /* Run All */
-    async function runAll() { const btn = document.getElementById('runBtn'), prog = document.getElementById('progBar'), txt = document.getElementById('progTxt'), sum = document.getElementById('sumRow'); btn.classList.add('busy'); btn.disabled = true; results = {}; sum.style.display = 'none'; applyView(); const all = SVCS.flatMap(g => g.items.map(s => ({ ...s, _group: g.group }))); let done = 0; prog.style.width = '0%'; txt.textContent = `Test başlatılıyor: 0 / ${all.length}`; const queue = [...all]; async function worker() { while (queue.length > 0) { const svc = queue.shift(), r = await checkOne(svc); results[r.k] = r; applyRow(r); const g = SVCS.find(g => g.group === svc._group); if (g) updGS(g); done++; updSum(); prog.style.width = Math.round(done / all.length * 100) + '%'; txt.textContent = done < all.length ? `Test ediliyor: ${done} / ${all.length}` : `Tamamlandı — ${all.length} servis`; } } await Promise.all(Array.from({ length: 8 }, () => worker())); btn.classList.remove('busy'); btn.disabled = false; sum.style.display = 'flex'; document.getElementById('lastRun').textContent = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); applyView(); }
-
-    /* Custom */
-    async function runCustom() { let raw = document.getElementById('cqInp').value.trim(); if (!raw) return; if (!/^https?:\/\//i.test(raw)) raw = 'https://' + raw; let host; try { host = new URL(raw).hostname; } catch { host = raw; } const btn = document.getElementById('cqBtn'); btn.classList.add('busy'); const r = await checkOne({ name: host, host, url: raw, favicon: raw.replace(/\/$/, '') + '/favicon.ico', _group: 'Özel' }); btn.classList.remove('busy'); const fs = !r.fetchOk ? 'block' : r.fetchMs < 200 ? 'ok' : 'slow', is = !r.imgOk ? 'block' : r.imgMs < 200 ? 'ok' : 'slow', bp = r.state === 'ok' ? Math.max(8, 100 - (r.ms || 0) / 3) : r.state === 'slow' ? Math.max(8, 55 - (r.ms || 0) / 20) : 0; const row = document.createElement('div'); row.className = 'crr'; row.innerHTML = `<div class="snw"><div class="dot ${r.state}"></div><div><div class="sn">${host}</div><div class="sh">${raw}</div></div></div><div class="cb"><div class="bo"><div class="bi2 ${r.state}" style="width:${bp}%"></div></div></div><div class="cp1"><div class="p1 ${fs}">${r.fetchOk ? r.fetchMs + ' ms' : '—'}</div><div class="pl">fetch</div></div><div class="cp2"><div class="p2 ${is}">${r.imgOk ? r.imgMs + ' ms' : '—'}</div><div class="pl" style="color:rgba(56,189,248,.4)">img</div></div><div><div class="sb ${r.state}">${{ ok: 'hızlı', slow: 'yavaş', block: 'engelli' }[r.state]}</div></div>`; const cont = document.getElementById('cqResults'); cont.insertBefore(row, cont.firstChild); while (cont.children.length > 10) cont.removeChild(cont.lastChild); const b = document.getElementById('cqBadge'); b.textContent = cont.children.length + ' sorgu'; b.className = 'ph-badge ok'; }
-
-    /* Packs */
-    function buildPackGrid() { const g = document.getElementById('packGrid'); g.innerHTML = ''; PACKS.forEach(p => { const c = document.createElement('div'); c.className = 'pc' + (loadedIds.has(p.id) ? ' on' : ''); c.id = 'pc_' + p.id; c.onclick = () => togglePack(p); c.innerHTML = `<div class="pc-top"><span class="pc-ico">${p.icon}</span><span class="pc-name">${p.name}</span><span class="pc-cnt">${p.count}</span></div><div class="pc-tags">${p.tags.map(t => `<span class="pc-tag">${t}</span>`).join('')}</div>`; g.appendChild(c); }); }
-    async function togglePack(p) { const card = document.getElementById('pc_' + p.id); if (loadedIds.has(p.id)) { loadedIds.delete(p.id); SVCS = SVCS.filter(g => g._pid !== p.id); card.classList.remove('on'); setMsg('', ''); applyView(); updPB(); return; } card.classList.add('busy'); setMsg('Yükleniyor…', ''); try { const data = await fetchJSON(p.url); ingestPack(data); loadedIds.add(p.id); card.classList.remove('busy'); card.classList.add('on'); setMsg(`"${data.meta.name}" yüklendi — ${data.services.length} servis.`, 'ok'); applyView(); updPB(); } catch (e) { card.classList.remove('busy'); setMsg('Hata: ' + e.message, 'err'); } }
-    async function loadPackUrl() { const inp = document.getElementById('packUrl'), url = inp.value.trim(); if (!url) return; const btn = document.getElementById('packUrlBtn'); btn.classList.add('busy'); setMsg('Yükleniyor…', ''); try { const data = await fetchJSON(url); ingestPack(data); loadedIds.add(data.meta.id); setMsg(`"${data.meta.name}" yüklendi.`, 'ok'); inp.value = ''; applyView(); updPB(); buildPackGrid(); } catch (e) { setMsg('Hata: ' + e.message, 'err'); } btn.classList.remove('busy'); }
-    function loadPackFile(input) { const f = input.files[0]; if (!f) return; const r = new FileReader(); r.onload = e => { try { const d = JSON.parse(e.target.result); valPack(d); ingestPack(d); loadedIds.add(d.meta.id); setMsg(`"${d.meta.name}" yüklendi.`, 'ok'); applyView(); updPB(); buildPackGrid(); } catch (err) { setMsg('JSON hatası: ' + err.message, 'err'); } }; r.readAsText(f); }
-    async function fetchJSON(url) { const res = await fetch(url); if (!res.ok) throw new Error(`HTTP ${res.status}`); const d = await res.json(); valPack(d); return d; }
-    function valPack(d) { if (!d.meta?.id || !d.meta?.name) throw new Error('"meta.id/name" eksik'); if (!Array.isArray(d.services) || !d.services.length) throw new Error('"services" dizisi boş'); d.services.forEach((s, i) => { if (!s.name || !s.host || !s.url || !s.favicon) throw new Error(`services[${i}] eksik alan`); }); }
-    function ingestPack(data) { SVCS = SVCS.filter(g => g._pid !== data.meta.id); SVCS.push({ group: data.meta.name, icon: data.meta.icon || '◈', _pid: data.meta.id, items: data.services }); }
-    function updPB() { const b = document.getElementById('packBadge'), n = loadedIds.size; b.textContent = n > 0 ? `${n} ek paket yüklü` : 'varsayılan liste aktif'; b.className = 'ph-badge' + (n > 0 ? ' ok' : ''); }
-    function setMsg(m, t) { const el = document.getElementById('packMsg'); el.textContent = m; el.className = 'pmsg' + (t ? ' ' + t : ''); }
-
-    /* RuleCheck */
-    async function loadRuleUrl() { const inp = document.getElementById('ruleUrl'), url = inp.value.trim(); if (!url) return; const btn = document.getElementById('ruleUrlBtn'); btn.classList.add('busy'); try { const res = await fetch(url); if (!res.ok) throw new Error(`HTTP ${res.status}`); ingestRules(await res.json()); inp.value = ''; } catch (e) { document.getElementById('ruleBadge').textContent = 'Hata: ' + e.message; } btn.classList.remove('busy'); }
-    function loadRuleFile(input) { const f = input.files[0]; if (!f) return; const r = new FileReader(); r.onload = e => { try { ingestRules(JSON.parse(e.target.result)); } catch (err) { document.getElementById('ruleBadge').textContent = 'Hata: ' + err.message; } }; r.readAsText(f); }
-    function ingestRules(data) { if (!data.meta || !Array.isArray(data.rules)) throw new Error('Geçersiz ruleset'); activeRules = data; const list = document.getElementById('ruleList'); list.innerHTML = ''; data.rules.forEach(rule => { const row = document.createElement('div'); row.className = 'rl-row pending'; row.id = 'rl_' + rule.id; row.innerHTML = `<div class="sv-dot sv-${rule.severity}"></div><div><div class="rl-name">${rule.name}</div><div class="rl-msg">${rule.description || ''}</div></div><div class="rl-badge">${{ critical: 'KRİTİK', warning: 'UYARI', info: 'BİLGİ' }[rule.severity] || rule.severity}</div>`; list.appendChild(row); }); const b = document.getElementById('ruleBadge'); b.textContent = `"${data.meta.name}" — ${data.rules.length} kural`; b.className = 'ph-badge warn'; document.getElementById('ruleActions').style.display = 'flex'; }
-    async function runRuleCheck() { if (!activeRules) return; const btn = document.getElementById('ruleRunBtn'); btn.classList.add('busy'); btn.disabled = true; let pass = 0, fail = 0, warn = 0; await Promise.all(activeRules.rules.map(async rule => { const r = await checkOne({ ...rule.service, _group: 'RuleCheck' }); const reach = r.state !== 'block', pingOk = !rule.conditions.max_ping_ms || (r.ms !== null && r.ms <= rule.conditions.max_ping_ms), mustReach = rule.conditions.must_reach !== false, passed = mustReach ? (reach && pingOk) : (!reach); const row = document.getElementById('rl_' + rule.id); if (!row) return; row.classList.remove('pending'); const badge = row.querySelector('.rl-badge'), msg = row.querySelector('.rl-msg'); if (passed) { badge.className = 'rl-badge pass'; badge.textContent = 'GEÇTİ'; msg.textContent = rule.pass_message || 'Kural karşılandı.'; pass++; } else { const crit = rule.severity === 'critical'; badge.className = 'rl-badge ' + (crit ? 'fail' : 'warn'); badge.textContent = crit ? 'BAŞARISIZ' : 'UYARI'; msg.textContent = rule.fail_message || 'Kural ihlali.'; if (crit) fail++; else warn++; } })); btn.classList.remove('busy'); btn.disabled = false; const b = document.getElementById('ruleBadge'); if (fail > 0) { b.textContent = `${fail} kritik hata, ${warn} uyarı`; b.className = 'ph-badge fail'; } else if (warn > 0) { b.textContent = `${warn} uyarı, ${pass} geçti`; b.className = 'ph-badge warn'; } else { b.textContent = `Tüm kurallar geçti (${pass})`; b.className = 'ph-badge ok'; } }
-    function clearRules() { activeRules = null; document.getElementById('ruleList').innerHTML = ''; document.getElementById('ruleActions').style.display = 'none'; const b = document.getElementById('ruleBadge'); b.textContent = 'kural yüklü değil'; b.className = 'ph-badge'; }
-
-    /* Panel & Drop */
-    function togglePanel(hdr) { const pb = hdr.nextElementSibling, ch = hdr.querySelector('.ph-chev'); pb.classList.toggle('open'); ch.classList.toggle('open'); }
-    function initDrops() {
-      setupDrop('packDrop', d => { valPack(d); ingestPack(d); loadedIds.add(d.meta.id); setMsg(`"${d.meta.name}" yüklendi.`, 'ok'); applyView(); updPB(); buildPackGrid(); });
-      setupDrop('ruleDrop', d => ingestRules(d));
-    }
-    function setupDrop(id, cb) { const z = document.getElementById(id); z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('over'); }); z.addEventListener('dragleave', () => z.classList.remove('over')); z.addEventListener('drop', e => { e.preventDefault(); z.classList.remove('over'); const f = e.dataTransfer.files[0]; if (!f) return; const r = new FileReader(); r.onload = ev => { try { cb(JSON.parse(ev.target.result)); } catch (err) { setMsg('JSON hatası: ' + err.message, 'err'); } }; r.readAsText(f); }); }
-
-    /* Init */
-    getPublicIP(); getLocalIP(); applyView(); buildPackGrid(); initDrops();
-  </script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/script.js"></script>
 </body>
 
 </html>
