@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "id": "social-media",
+    "name": "Sosyal Medya",
+    "description": "Major social media platforms",
+    "icon": "◈",
+    "version": "1.0.0",
+    "author": "netscope-community",
+    "tags": ["social", "media", "entertainment"]
+  },
+  "services": [
+    { "name": "Instagram",   "host": "instagram.com",  "url": "https://www.instagram.com",  "favicon": "https://www.instagram.com/favicon.ico" },
+    { "name": "X / Twitter", "host": "x.com",          "url": "https://x.com",              "favicon": "https://abs.twimg.com/favicons/twitter.3.ico" },
+    { "name": "Facebook",    "host": "facebook.com",   "url": "https://www.facebook.com",   "favicon": "https://www.facebook.com/favicon.ico" },
+    { "name": "TikTok",      "host": "tiktok.com",     "url": "https://www.tiktok.com",     "favicon": "https://www.tiktok.com/favicon.ico" },
+    { "name": "LinkedIn",    "host": "linkedin.com",   "url": "https://www.linkedin.com",   "favicon": "https://www.linkedin.com/favicon.ico" },
+    { "name": "YouTube",     "host": "youtube.com",    "url": "https://www.youtube.com",    "favicon": "https://www.youtube.com/favicon.ico" },
+    { "name": "Reddit",      "host": "reddit.com",     "url": "https://www.reddit.com",     "favicon": "https://www.reddit.com/favicon.ico" },
+    { "name": "Pinterest",   "host": "pinterest.com",  "url": "https://www.pinterest.com",  "favicon": "https://www.pinterest.com/favicon.ico" },
+    { "name": "Twitch",      "host": "twitch.tv",      "url": "https://www.twitch.tv",      "favicon": "https://www.twitch.tv/favicon.ico" },
+    { "name": "Snapchat",    "host": "snapchat.com",   "url": "https://www.snapchat.com",   "favicon": "https://www.snapchat.com/favicon.ico" }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "version": "1.0.0",
+  "description": "Reachability Check community service pack index. Add your pack here via Pull Request.",
+  "packs": [
+    {
+      "id": "social-media",
+      "name": "Sosyal Medya",
+      "description": "Major social media platforms",
+      "icon": "◈",
+      "tags": [
+        "social",
+        "media"
+      ],
+      "url": "https://raw.githubusercontent.com/abdullahaligun/reachability-check/main/services/social-media.json",
+      "author": "abdullahaligun",
+      "services_count": 10
+    },
+    {
+      "id": "ai-services",
+      "name": "AI Servisleri",
+      "description": "AI assistants, image generators and ML platforms",
+      "icon": "◆",
+      "tags": [
+        "ai",
+        "llm",
+        "ml"
+      ],
+      "url": "https://raw.githubusercontent.com/abdullahaligun/reachability-check/main/services/ai-services.json",
+      "author": "abdullahaligun",
+      "services_count": 11
+    },
+    {
+      "id": "communication",
+      "name": "İletişim Araçları",
+      "description": "Messaging, video conferencing and team collaboration",
+      "icon": "◉",
+      "tags": [
+        "communication",
+        "messaging"
+      ],
+      "url": "https://raw.githubusercontent.com/abdullahaligun/reachability-check/main/services/communication.json",
+      "author": "abdullahaligun",
+      "services_count": 10
+    },
+    {
+      "id": "developer-tools",
+      "name": "Geliştirici Araçları",
+      "description": "Code hosting, package registries and developer platforms",
+      "icon": "◇",
+      "tags": [
+        "developer",
+        "git",
+        "devops"
+      ],
+      "url": "https://raw.githubusercontent.com/abdullahaligun/reachability-check/main/services/developer-tools.json",
+      "author": "abdullahaligun",
+      "services_count": 11
+    },
+    {
+      "id": "news-search",
+      "name": "Arama & Haber",
+      "description": "Search engines and major news outlets",
+      "icon": "◎",
+      "tags": [
+        "news",
+        "search",
+        "media"
+      ],
+      "url": "https://raw.githubusercontent.com/abdullahaligun/reachability-check/main/services/news-search.json",
+      "author": "abdullahaligun",
+      "services_count": 9
+    },
+    {
+      "id": "media-storage",
+      "name": "Medya & Depolama",
+      "description": "Streaming platforms and cloud storage services",
+      "icon": "◐",
+      "tags": [
+        "media",
+        "streaming",
+        "storage"
+      ],
+      "url": "https://raw.githubusercontent.com/abdullahaligun/reachability-check/main/services/media-storage.json",
+      "author": "abdullahaligun",
+      "services_count": 8
+    }
+  ]
+}

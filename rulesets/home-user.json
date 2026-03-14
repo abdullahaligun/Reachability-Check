@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "id": "home-user",
+    "name": "Ev Kullanıcısı — Temel Kontrol",
+    "description": "Basic connectivity check for home users. Detects ISP-level blocks and throttling.",
+    "version": "1.0.0",
+    "author": "netscope-community",
+    "tags": ["home", "isp", "basic"],
+    "on_failure": "warn"
+  },
+  "rules": [
+    {
+      "id": "rule-google",
+      "name": "Google Erişimi",
+      "description": "Basic internet connectivity test",
+      "service": { "name": "Google", "host": "google.com", "url": "https://www.google.com", "favicon": "https://www.google.com/favicon.ico" },
+      "severity": "critical",
+      "conditions": { "must_reach": true, "max_ping_ms": 1000 },
+      "fail_message": "Google'a erişilemiyor — internet bağlantısını kontrol et.",
+      "pass_message": "Temel internet bağlantısı çalışıyor."
+    },
+    {
+      "id": "rule-youtube",
+      "name": "YouTube Video Kalitesi",
+      "description": "YouTube must be reachable with acceptable latency for HD streaming",
+      "service": { "name": "YouTube", "host": "youtube.com", "url": "https://www.youtube.com", "favicon": "https://www.youtube.com/favicon.ico" },
+      "severity": "warning",
+      "conditions": { "must_reach": true, "max_ping_ms": 300 },
+      "fail_message": "YouTube gecikmesi yüksek — HD yayın kalitesi düşebilir.",
+      "pass_message": "YouTube yayın için uygun gecikme seviyesinde."
+    },
+    {
+      "id": "rule-whatsapp",
+      "name": "WhatsApp Erişimi",
+      "description": "Check if WhatsApp is reachable",
+      "service": { "name": "WhatsApp", "host": "whatsapp.com", "url": "https://web.whatsapp.com", "favicon": "https://web.whatsapp.com/favicon.ico" },
+      "severity": "warning",
+      "conditions": { "must_reach": true, "max_ping_ms": 800 },
+      "fail_message": "WhatsApp erişilemiyor — ISP kısıtlaması olabilir.",
+      "pass_message": "WhatsApp erişilebilir."
+    },
+    {
+      "id": "rule-wikipedia",
+      "name": "Wikipedia Engeli Yok",
+      "description": "Wikipedia should be freely accessible",
+      "service": { "name": "Wikipedia", "host": "wikipedia.org", "url": "https://en.wikipedia.org", "favicon": "https://en.wikipedia.org/favicon.ico" },
+      "severity": "info",
+      "conditions": { "must_reach": true },
+      "fail_message": "Wikipedia erişilemiyor — bilgiye erişim kısıtlanmış olabilir.",
+      "pass_message": "Wikipedia erişilebilir."
+    }
+  ]
+}

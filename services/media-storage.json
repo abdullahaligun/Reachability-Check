@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "id": "media-storage",
+    "name": "Medya & Depolama",
+    "description": "Streaming platforms and cloud storage services",
+    "icon": "◐",
+    "version": "1.0.0",
+    "author": "netscope-community",
+    "tags": ["media", "streaming", "storage", "cloud"]
+  },
+  "services": [
+    { "name": "Spotify",      "host": "spotify.com",       "url": "https://open.spotify.com",     "favicon": "https://open.spotify.com/favicon.ico" },
+    { "name": "Netflix",      "host": "netflix.com",       "url": "https://www.netflix.com",      "favicon": "https://www.netflix.com/favicon.ico" },
+    { "name": "Google Drive", "host": "drive.google.com",  "url": "https://drive.google.com",     "favicon": "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png" },
+    { "name": "Dropbox",      "host": "dropbox.com",       "url": "https://www.dropbox.com",      "favicon": "https://www.dropbox.com/favicon.ico" },
+    { "name": "OneDrive",     "host": "onedrive.live.com", "url": "https://onedrive.live.com",    "favicon": "https://onedrive.live.com/favicon.ico" },
+    { "name": "iCloud",       "host": "icloud.com",        "url": "https://www.icloud.com",       "favicon": "https://www.icloud.com/favicon.ico" },
+    { "name": "Deezer",       "host": "deezer.com",        "url": "https://www.deezer.com",       "favicon": "https://www.deezer.com/favicon.ico" },
+    { "name": "SoundCloud",   "host": "soundcloud.com",    "url": "https://soundcloud.com",       "favicon": "https://soundcloud.com/favicon.ico" }
+  ]
+}

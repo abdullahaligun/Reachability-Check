@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "id": "developer-tools",
+    "name": "Geliştirici Araçları",
+    "description": "Code hosting, package registries and developer platforms",
+    "icon": "◇",
+    "version": "1.0.0",
+    "author": "netscope-community",
+    "tags": ["developer", "git", "devops", "packages"]
+  },
+  "services": [
+    { "name": "GitHub",         "host": "github.com",        "url": "https://github.com",           "favicon": "https://github.com/favicon.ico" },
+    { "name": "GitLab",         "host": "gitlab.com",        "url": "https://gitlab.com",           "favicon": "https://gitlab.com/favicon.ico" },
+    { "name": "Bitbucket",      "host": "bitbucket.org",     "url": "https://bitbucket.org",        "favicon": "https://bitbucket.org/favicon.ico" },
+    { "name": "npm",            "host": "npmjs.com",         "url": "https://www.npmjs.com",        "favicon": "https://www.npmjs.com/favicon.ico" },
+    { "name": "PyPI",           "host": "pypi.org",          "url": "https://pypi.org",             "favicon": "https://pypi.org/favicon.ico" },
+    { "name": "Stack Overflow", "host": "stackoverflow.com", "url": "https://stackoverflow.com",   "favicon": "https://stackoverflow.com/favicon.ico" },
+    { "name": "Vercel",         "host": "vercel.com",        "url": "https://vercel.com",           "favicon": "https://vercel.com/favicon.ico" },
+    { "name": "Netlify",        "host": "netlify.com",       "url": "https://www.netlify.com",      "favicon": "https://www.netlify.com/favicon.ico" },
+    { "name": "Cloudflare",     "host": "cloudflare.com",    "url": "https://www.cloudflare.com",   "favicon": "https://www.cloudflare.com/favicon.ico" },
+    { "name": "Docker Hub",     "host": "hub.docker.com",    "url": "https://hub.docker.com",       "favicon": "https://hub.docker.com/favicon.ico" },
+    { "name": "Render",         "host": "render.com",        "url": "https://render.com",           "favicon": "https://render.com/favicon.ico" }
+  ]
+}

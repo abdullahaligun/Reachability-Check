@@ -1,0 +1,28 @@
+{
+  "name": "reachability-check",
+  "version": "2.0.0",
+  "description": "Browser-based reachability checker — test network connectivity, firewall rules and access restrictions",
+  "main": "index.html",
+  "scripts": {
+    "validate:services": "node scripts/validate.js services/",
+    "validate:rulesets": "node scripts/validate.js rulesets/ --type ruleset",
+    "validate": "npm run validate:services && npm run validate:rulesets",
+    "lint:urls": "node scripts/lint-urls.js",
+    "check:index": "node scripts/check-index.js",
+    "ci": "npm run validate && npm run lint:urls && npm run check:index"
+  },
+  "keywords": [
+    "network",
+    "connectivity",
+    "firewall",
+    "censorship",
+    "ping",
+    "browser-tool"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abdullahaligun/reachability-check"
+  },
+  "devDependencies": {}
+}
