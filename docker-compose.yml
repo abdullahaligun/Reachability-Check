@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  reachability-check:
+    build: .
+    container_name: reachability-check
+    restart: always
+    ports:
+      - "8080:80"
+    networks:
+      - reachability-net
+
+networks:
+  reachability-net:
+    driver: bridge
